@@ -7,6 +7,115 @@ import re
 from bs4 import BeautifulSoup
 
 
+class TextProcessor:
+    """
+    A class for processing text data by removing punctuation,
+    and converting to lowercase.
+
+    Methods:
+        replace_newlines(text: str) -> str:
+
+        to_lowercase(text: str) -> str:
+
+        replace_dash_quotes(
+            text: str,
+            dash_for: str = ' ',
+            quote_for: str = ' ',
+            quotes_for: str = ' '
+        ) -> str:
+
+        replace_marks(
+            text: str,
+            question_mark_for: str = ' ',
+            exclamation_for: str = ' ',
+            parenthesis_for: str = ' ',
+        ) -> str:
+
+        replace_punctuation(
+            text: str,
+            dot_for: str = ' ',
+            comma_for: str = ' ',
+            semicolon_for: str = ' ',
+            colon_for: str = ' '
+        ) -> str:
+    """
+    @staticmethod
+    def replace_newlines(text: str) -> str:
+        """
+        Replaces new line characters with a space and replaces
+        more than one space with a single space using regex.
+        """
+
+        return re.sub(r'\s+', ' ', text.replace('\n', ' '))
+
+    @staticmethod
+    def to_lowercase(text: str) -> str:
+        """
+        Converts all uppercase characters in the text to lowercase.
+        """
+        return text.lower()
+
+    @staticmethod
+    def replace_dash_quotes(
+        text: str,
+        dash_for: str = ' ',
+        quote_for: str = ' ',
+        quotes_for: str = ' '
+    ) -> str:
+        """
+        Replaces all occurrences of -,' and " characters with
+        empty strings and replaces all colons with spaces.
+        """
+
+        replacements = {
+            ord('-'): dash_for,
+            ord('\''): quote_for,
+            ord('\"'): quotes_for,
+        }
+
+        return text.translate(replacements)
+
+    @staticmethod
+    def replace_marks(
+        text: str,
+        question_mark_for: str = ' ',
+        exclamation_for: str = ' ',
+        parenthesis_for: str = ' ',
+    ) -> str:
+        """
+        Replaces all occurrences of (,),.,,,?,and ! with spaces.
+        """
+        replacements = {
+            ord('?'): question_mark_for,
+            ord('!'): exclamation_for,
+            ord('('): parenthesis_for,
+            ord(')'): parenthesis_for,
+        }
+
+        return text.translate(replacements)
+
+    @staticmethod
+    def replace_punctuation(
+        text: str,
+        dot_for: str = ' ',
+        comma_for: str = ' ',
+        semicolon_for: str = ' ',
+        colon_for: str = ' '
+    ) -> str:
+        """
+        Replaces commas, semicolons, and colons with specified 
+        characters.
+        """
+        replacements = {
+            ord(','): comma_for,
+            ord(';'): semicolon_for,
+            ord(':'): colon_for,
+            ord('.'): dot_for,
+        }
+
+        return text.translate(replacements)
+
+
 class HTMLCleaner:
     """
     A class for cleaning HTML formatted text by removing pre-formatted
