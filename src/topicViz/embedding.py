@@ -4,6 +4,43 @@ tokenization and stopword removal.
 """
 import nltk
 import numpy as np
+from sklearn.decomposition import PCA
+
+
+def perform_pca(
+    data: np.array,
+    num_components=None,
+    explained_variance_ratio=None
+) -> tuple[np.array, PCA]:
+    """
+    Performs PCA on the data and returns the reduced representation
+    of the data.
+
+    INPUTS:
+    data: The data to perform PCA on.
+    num_components: The number of components to keep.
+    explained_variance_ratio: The minimum amount of variance to keep.
+
+    OUTPUTS:
+    reduced_data: The reduced representation of the data.
+    """
+
+    pca = PCA()
+    transformed_data = pca.fit_transform(data)
+
+    cumulative_variance_ratio = np.cumsum(
+        pca.explained_variance_ratio_
+    )
+
+    if num_components is None and explained_variance_ratio is not None:
+
+        num_components = np.argmax(
+            cumulative_variance_ratio >= explained_variance_ratio
+        ) + 1
+
+    reduced_data = transformed_data[:, :num_components]
+
+    return reduced_data, pca
 
 
 class NLPProcessor:
